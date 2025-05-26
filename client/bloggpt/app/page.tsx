@@ -31,15 +31,40 @@ const BlogGeneratorPage: React.FC = () => {
 
     try {
       const blogData = await generateBlog(topic);
+      console.log("blogData",blogData)
       const tasksOutput = blogData.blog.tasks_output;
-      const cleanedBlog = tasksOutput.filter((task: any) => task.name === "edit_task")
-      setBlog(cleanedBlog[0].raw);
+      const cleanedBlog = tasksOutput.filter((task: any) => task.name === "edit_task");
+      const blogContent = cleanedBlog[0].raw;
 
-      // Fetch image URL
-      const imageURL = tasksOutput.filter((task: any) => task.name === "design_task")[0].raw;
-      console.log("imageURL data", imageURL);
-      console.log("imageURL json", JSON.parse(imageURL));
-      setImageUrl(JSON.parse(imageURL).image_url);
+      // Save to database first
+      const response = await fetch('/api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          title: blogContent.trim().split("\n")[0],
+          content: blogContent,
+          imgURL: null // Default to null if no image URL is found
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save blog to database');
+      }
+
+      // Try to fetch image URL after saving to database
+      try {
+        const imageURL = tasksOutput.filter((task: any) => task.name === "design_task")[0].raw;
+        const image_url = JSON.parse(imageURL)?.image_url;
+        console.log("image_url",image_url)
+        setImageUrl(image_url);
+      } catch (imageError) {
+        console.error('Error fetching image URL:', imageError);
+        // Continue without image URL
+      }
+
+      setBlog(blogContent);
     } catch (err) {
       setError((err as Error).message);
     } finally {
