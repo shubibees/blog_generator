@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Image from "next/image";
 import bloggptLogo from "./assets/bloggpt logo.png";
+import BlogListing from "@/components/BlogListing";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -35,7 +36,14 @@ export default function RootLayout({
             alt="bloggpt logo"
           />
         </div>
-        {children}
+        <div className="container">
+          <div className="left-container">
+            {children}
+          </div>
+          <div className="right-container">
+            <BlogListing />
+          </div>
+        </div>
       </body>
     </html>
   );

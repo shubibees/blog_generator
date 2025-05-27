@@ -17,3 +17,10 @@ body {
     --radius: 0.5rem;
   }
 }
+
+.container{
+  padding-top: 70px;
+  display: grid;
+  max-width: 100%;
+  grid-template-columns: 4fr 1fr;
+}
