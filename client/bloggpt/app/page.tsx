@@ -149,10 +149,32 @@ const BlogGeneratorPage: React.FC = () => {
         try {
           const designData: DesignData = JSON.parse(designTask.raw);
           extractedImageUrl = designData.image_url || null;
+
+          // save image in assets folder
+          if (extractedImageUrl) {
+            const imageResponse = await fetch(extractedImageUrl);
+            const blob = await imageResponse.blob();
+            const imageUrl = URL.createObjectURL(blob);
+            const image = document.createElement('img');
+            image.src = imageUrl;
+            image.onload = () => {
+              const canvas = document.createElement('canvas');
+              canvas.width = image.width;
+              canvas.height = image.height;
+              const ctx = canvas.getContext('2d');
+              ctx?.drawImage(image, 0, 0);
+              const dataURL = canvas.toDataURL('image/png');
+              const link = document.createElement('a');
+              link.href = dataURL;
+              link.download = 'banner.png';
+              link.click();
+            };
+          }
         } catch (parseError) {
           console.warn('Failed to parse design task data:', parseError);
         }
       }
+
 
       // Save to database
       const saveResponse = await fetch('/api', {
@@ -211,6 +233,7 @@ const BlogGeneratorPage: React.FC = () => {
               <Button variant="outline" onClick={handleReset} className="mb-4">
                 <ArrowLeft className="mr-2 h-4 w-4" /> Generate Another Blog
               </Button>
+                  <h1>Image URL: {imageUrl}</h1>
               {imageUrl && (
                 <div className="relative w-full h-64 md:h-96 rounded-lg overflow-hidden">
                   <Image
