@@ -51,6 +51,11 @@ interface DesignData {
   image_description: string;
 }
 
+interface Response{
+  success: boolean;
+  message: string;
+  filePath: string;
+}
 const BlogGeneratorPage: React.FC = () => {
   const [blog, setBlog] = useState<string | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -76,7 +81,7 @@ const BlogGeneratorPage: React.FC = () => {
       const blogData: BlogData = {
   "topic": "Creative DIY Projects with Sainik Laminates: Personalise Your Space",
   "blog": {
-    "raw": "{\"image_url\": \"https://oaidalleapiprodscus.blob.core.windows.net/private/org-42CupfAU425pAjaxRiGRzya3/user-vT0G0kdoRtkL0bPUMGDy6Z72/img-JVaZuuXYU64yQfaLVcE3Na3i.png?st=2025-05-27T05%3A01%3A32Z&se=2025-05-27T07%3A01%3A32Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-27T04%3A53%3A45Z&ske=2025-05-28T04%3A53%3A45Z&sks=b&skv=2024-08-04&sig=kPsLEjiKzFLP7/SGdVd1JwSzqD4uDiNBm6C0k4DG430%3D\", \"image_description\": \"A creative DIY project involving the use of patterned laminates to customize a living room space. This project features dazzling laminates accentuating the walls or furniture for an appealing, personalized touch. The room is adorned with soft lighting, plush couches for comfort, a neatly arranged coffee table, modern art hanging on the walls and an indoor plant for freshness. The floor covered with a large area rug lends a cozy vibe to the room. Every corner of this living room is accentuated to exhibit striking and visually appealing details.\"}",
+    "raw": "{\"image_url\": \"https://cdn.openai.com/API/docs/images/images-gallery/speaker-output.png\", \"image_description\": \"A creative DIY project involving the use of patterned laminates to customize a living room space. This project features dazzling laminates accentuating the walls or furniture for an appealing, personalized touch. The room is adorned with soft lighting, plush couches for comfort, a neatly arranged coffee table, modern art hanging on the walls and an indoor plant for freshness. The floor covered with a large area rug lends a cozy vibe to the room. Every corner of this living room is accentuated to exhibit striking and visually appealing details.\"}",
     "pydantic": null,
     "json_dict": null,
     "tasks_output": [
@@ -118,7 +123,7 @@ const BlogGeneratorPage: React.FC = () => {
         "name": "design_task",
         "expected_output": "A visually appealing banner image related to the blog post topic",
         "summary": "Create a banner image for the blog post that captures...",
-        "raw": "{\"image_url\": \"https://oaidalleapiprodscus.blob.core.windows.net/private/org-42CupfAU425pAjaxRiGRzya3/user-vT0G0kdoRtkL0bPUMGDy6Z72/img-JVaZuuXYU64yQfaLVcE3Na3i.png?st=2025-05-27T05%3A01%3A32Z&se=2025-05-27T07%3A01%3A32Z&sp=r&sv=2024-08-04&sr=b&rscd=inline&rsct=image/png&skoid=475fd488-6c59-44a5-9aa9-31c4db451bea&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-27T04%3A53%3A45Z&ske=2025-05-28T04%3A53%3A45Z&sks=b&skv=2024-08-04&sig=kPsLEjiKzFLP7/SGdVd1JwSzqD4uDiNBm6C0k4DG430%3D\", \"image_description\": \"A creative DIY project involving the use of patterned laminates to customize a living room space. This project features dazzling laminates accentuating the walls or furniture for an appealing, personalized touch. The room is adorned with soft lighting, plush couches for comfort, a neatly arranged coffee table, modern art hanging on the walls and an indoor plant for freshness. The floor covered with a large area rug lends a cozy vibe to the room. Every corner of this living room is accentuated to exhibit striking and visually appealing details.\"}",
+        "raw": "{\"image_url\": \"https://cdn.openai.com/API/docs/images/images-gallery/speaker-output.png\", \"image_description\": \"A creative DIY project involving the use of patterned laminates to customize a living room space. This project features dazzling laminates accentuating the walls or furniture for an appealing, personalized touch. The room is adorned with soft lighting, plush couches for comfort, a neatly arranged coffee table, modern art hanging on the walls and an indoor plant for freshness. The floor covered with a large area rug lends a cozy vibe to the room. Every corner of this living room is accentuated to exhibit striking and visually appealing details.\"}",
         "pydantic": null,
         "json_dict": null,
         "agent": "Senior Banner Image Designer",
@@ -141,62 +146,81 @@ const BlogGeneratorPage: React.FC = () => {
         throw new Error('No edited blog content found');
       }
 
-      // Extract the image URL from design task
       const designTask = blogData.blog.tasks_output.find(task => task.name === "design_task");
-      let extractedImageUrl: string | null = null;
-      
+      let newImageUrl: string | null = null;
+
       if (designTask) {
         try {
           const designData: DesignData = JSON.parse(designTask.raw);
-          extractedImageUrl = designData.image_url || null;
+          const extractedImageUrl = designData.image_url;
 
-          // save image in assets folder
           if (extractedImageUrl) {
-            const imageResponse = await fetch(extractedImageUrl);
-            const blob = await imageResponse.blob();
-            const imageUrl = URL.createObjectURL(blob);
-            const image = document.createElement('img');
-            image.src = imageUrl;
-            image.onload = () => {
-              const canvas = document.createElement('canvas');
-              canvas.width = image.width;
-              canvas.height = image.height;
-              const ctx = canvas.getContext('2d');
-              ctx?.drawImage(image, 0, 0);
-              const dataURL = canvas.toDataURL('image/png');
-              const link = document.createElement('a');
-              link.href = dataURL;
-              link.download = 'banner.png';
-              link.click();
-            };
+            const response = await fetch(extractedImageUrl);
+            const blob = await response.blob();
+            const reader = new FileReader();
+
+            const result = await new Promise<{imgURL: string}>((resolve, reject) => {
+              reader.onloadend = async () => {
+                try {
+                  const base64data = reader.result as string;
+                  const timestamp = new Date().getTime();
+                  const fileName = `banner_${timestamp}.png`;
+
+                  const saveResponse = await fetch('/api/save-image', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      base64Image: base64data,
+                      fileName: fileName
+                    })
+                  });
+
+                  const responseData = await saveResponse.json();
+                  if (responseData.success) {
+                    newImageUrl = responseData.filePath;
+                    console.log('Image saved successfully');
+                  } else {
+                    console.error('Failed to save image');
+                    throw new Error('Failed to save image');
+                  }
+
+                  await fetch('/api', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      title: blogData.topic,
+                      content: editedTask.raw,
+                      imgURL: newImageUrl,
+                    }),
+                  });
+                  resolve({
+                    imgURL: newImageUrl,
+                  });
+                } catch (error) {
+                  console.error('Error processing image:', error);
+                  reject(error);
+                }
+              };
+              reader.onerror = (error) => {
+                console.error('FileReader error:', error);
+                reject(error);
+              };
+              reader.readAsDataURL(blob);
+            });
           }
-        } catch (parseError) {
-          console.warn('Failed to parse design task data:', parseError);
+        } catch (error) {
+          console.error('Error processing design task:', error);
+          throw error;
         }
       }
 
-
-      // Save to database
-      const saveResponse = await fetch('/api', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: blogData.topic,
-          content: editedTask.raw,
-          imgURL: extractedImageUrl,
-        }),
-      });
-
-      if (!saveResponse.ok) {
-        const errorData = await saveResponse.json();
-        throw new Error(errorData.error || 'Failed to save blog to database');
-      }
-
-      // Update state with successful results
+      
       setBlog(editedTask.raw);
-      setImageUrl(extractedImageUrl);
+      setImageUrl(result.imgURL);
 
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred while generating the blog';
