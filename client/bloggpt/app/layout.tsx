@@ -52,9 +52,9 @@ export default async function RootLayout({
         </div>
         <div className="container">
           <div className="left-container">{children}</div>
-          {/* <div className="right-container">
+          <div className="right-container">
             <BlogListing blogList={blogList} />
-          </div> */}
+          </div>
         </div>
       </body>
     </html>

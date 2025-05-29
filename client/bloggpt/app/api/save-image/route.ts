@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, '');
     
     // Create uploads directory if it doesn't exist
-    const uploadsDir = path.join(process.cwd(),'app', 'assets', 'banner_images');
+    const uploadsDir = path.join(process.cwd(),'public','banner_images');
     await writeFile(
       path.join(uploadsDir, fileName),
       base64Data,
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       message: 'Image saved successfully',
-      filePath: `/app/assets/banner_images/${fileName}`
+      filePath: `/banner_images/${fileName}`
     });
   } catch (error) {
     console.error('Error saving image:', error);
