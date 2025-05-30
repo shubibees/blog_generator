@@ -13,11 +13,10 @@ load_dotenv()
 os.environ['SERPER_API_KEY'] = os.getenv('SERPER_API_KEY')
 
 # Initialize the tool for internet searching capabilities
-tool = SerperDevTool()
 
 from crewai_tools import DallETool
 
-dalle_tool = DallETool(model="dall-e-3",
+dalle_tool = DallETool(model="dall-e-2",
                        size="1024x1024",
                        quality="standard",
                        n=1)
@@ -34,7 +33,7 @@ class BlogGenerator():
         return Agent(
             config=self.agents_config['planner'],
             verbose=True,
-            tools=[tool]
+            tools=[SerperDevTool()]
         )
 
     @agent
