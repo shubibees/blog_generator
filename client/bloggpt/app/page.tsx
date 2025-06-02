@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ImageIcon } from "lucide-react";
 import { marked } from "marked";
+import ReactMarkdown from "react-markdown";
 import Image from "next/image";
 import DOMPurify from "dompurify";
 import BlogListing from "@/components/BlogListing";
@@ -277,10 +278,9 @@ const BlogGeneratorPage: React.FC = () => {
                 </div>
               )}
               
-              <div
-                className="prose lg:prose-xl dark:prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(blog) }}
-              />
+              <div className="prose lg:prose-xl dark:prose-invert max-w-none">
+                <ReactMarkdown>{blog}</ReactMarkdown>
+              </div>
             </div>
           ) : (
             <div className="space-y-6">

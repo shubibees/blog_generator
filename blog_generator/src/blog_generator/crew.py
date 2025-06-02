@@ -16,7 +16,7 @@ os.environ['SERPER_API_KEY'] = os.getenv('SERPER_API_KEY')
 
 from crewai_tools import DallETool
 
-dalle_tool = DallETool(model="dall-e-2",
+dalle_tool = DallETool(model="dall-e-3",
                        size="1024x1024",
                        quality="standard",
                        n=1)

@@ -12,7 +12,7 @@ const db = new sqlite3.Database(
   }
 );
 
-// Serialize method ensures that database queries are executed sequentially
+// Serialize method ensures that database queries are executed sequentiall
 db.serialize(() => {
           db.run("DELETE FROM blogs where id in (2,3)")
           db.close((err) => {
