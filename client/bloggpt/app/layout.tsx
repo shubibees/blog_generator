@@ -4,7 +4,7 @@ import "./globals.css";
 import Image from "next/image";
 import bloggptLogo from "./assets/bloggpt logo.png";
 import BlogListing from "@/components/BlogListing";
-
+import Link from "next/link"
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -35,7 +35,9 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="absolute top-4 left-4 z-50">
-          <Image src={bloggptLogo} alt="bloggpt logo" />
+          <Link href="/">
+            <Image src={bloggptLogo} alt="bloggpt logo" />
+          </Link>
         </div>
         <div className="container">
           <div className="left-container">{children}</div>

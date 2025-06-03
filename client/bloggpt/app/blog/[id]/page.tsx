@@ -49,9 +49,7 @@ const BlogDetailPage = async ({ params }: { params: { id: string } }) => {
             priority // Add priority for above-the-fold images
           />
         </div>
-        
-        <div className="p-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">{blog.title}</h1>
+        <div className="prose lg:prose-xl dark:prose-invert max-w-none">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{blog.content}</ReactMarkdown>
         </div>
       </div>

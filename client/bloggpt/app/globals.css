@@ -36,10 +36,12 @@ html{
   max-height: calc(100vh - 100px);
   scroll-behavior: smooth;
   overflow-y: scroll;
+  scroll-margin-block-end: 100px;
 }
 
 .left-container{
   height:calc(100vh); 
   scroll-behavior: smooth;
   overflow-y: auto;
+  scroll-margin-block-end: 100px;
 }

@@ -4,6 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from 'remark-gfm';
+
 
 interface Blog {
     id: string;
@@ -46,7 +49,8 @@ const BlogListing = () => {
                     </div>
                     <div className="p-6">
                         <h2 className="text-xl font-bold text-gray-900 mb-2">{blog.title}</h2>
-                        <div className="text-gray-600 mb-4" dangerouslySetInnerHTML={{ __html: blog.content.trim().slice(0, 150) }}></div>
+                        {/* <div className="text-gray-600 mb-4" dangerouslySetInnerHTML={{ __html: blog.content.trim().slice(0, 150) }}></div> */}
+                        {/* <ReactMarkdown remarkPlugins={[remarkGfm]}>{blog.content.trim().slice(0,150)}</ReactMarkdown> */}
                         <Link
                             href={`/blog/${blog.id}`}
                             className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors"

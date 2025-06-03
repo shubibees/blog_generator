@@ -13,12 +13,22 @@ const db = new sqlite3.Database(
 );
 
 // Serialize method ensures that database queries are executed sequentiall
+// db.serialize(() => {
+//           db.run("DELETE FROM blogs where id in (26)")
+//           db.close((err) => {
+//               if (err) {
+//                   return console.error(err.message);
+//               }
+//               console.log("Closed the database connection.");
+//           });
+// });
+// insert image path /banner_images/img-Lo9mXmszyc6VfueL458inwLS.png at id 28
 db.serialize(() => {
-          db.run("DELETE FROM blogs where id in (5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24)")
-          db.close((err) => {
-              if (err) {
-                  return console.error(err.message);
-              }
-              console.log("Closed the database connection.");
-          });
+  db.run("UPDATE blogs SET imgURL = '/banner_images/img-Lo9mXmszyc6VfueL458inwLS.png' WHERE id = 28");
+  db.close((err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log("Closed the database connection.");
+  });
 });
