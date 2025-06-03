@@ -15,7 +15,7 @@ write_task:
     4. Ensure the post is structured with an engaging introduction, insightful body, and a summarizing conclusion.
     5. Format proper headings, paragraphs, and styling.
     6. Proofread for grammatical errors and alignment with the brand's voice.
-  expected_output: A well-written blog post in Markdown format, ready for publication, each section should have 2 or 3 paragraphs.
+  expected_output: A beautifully formatted markdown document with proper structure, spaces, citations, and view elements that enhance readability and presentation, without markdown code blocks (no ``` markers).
   agent: writer
   depends_on:
     - plan_task
@@ -23,7 +23,7 @@ write_task:
 edit_task:
   description: Proofread the given blog post for grammatical errors and alignment with the brand's voice
   expected_output: >
-    A well-written blog post, ready for publication, each section should have 2 or 3 paragraphs.
+    A beautifully formatted markdown document with proper structure, spaces, citations, and view elements that enhance readability and presentation, without markdown code blocks (no ``` markers).
   agent: editor
   depends_on:
     - write_task

@@ -69,8 +69,9 @@ const BlogGeneratorPage: React.FC = () => {
 
   const processDesignImage = async (designTask: Task): Promise<string | null> => {
     try {
-      const designData: DesignData = JSON.parse(designTask.raw);
+      const designData: DesignData = designTask.pydantic;
       const extractedImageUrl = designData.image_url;
+      console.log("extracted image",extractedImageUrl)
 
       if (!extractedImageUrl) {
         console.warn('No image URL found in design task');
@@ -78,6 +79,7 @@ const BlogGeneratorPage: React.FC = () => {
       }
 
       const response = await fetch(extractedImageUrl);
+      console.log("response image", response)
       if (!response.ok) {
         throw new Error(`Failed to fetch image: ${response.statusText}`);
       }
@@ -198,7 +200,7 @@ const BlogGeneratorPage: React.FC = () => {
       }
 
       // Extract edited blog content
-      const editedTask = blogData.blog.tasks_output.find(task => task.name === "edit_task");
+      const editedTask = blogData.blog.tasks_output.find(task => task.name === "write_task");
       if (!editedTask) {
         throw new Error('No edited blog content found');
       }

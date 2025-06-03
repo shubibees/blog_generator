@@ -5,6 +5,7 @@ from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 from dotenv import load_dotenv
 import os
+from pydantic import BaseModel
 
 # Load environment variables
 load_dotenv()
@@ -20,6 +21,10 @@ dalle_tool = DallETool(model="dall-e-3",
                        size="1024x1024",
                        quality="standard",
                        n=1)
+
+class DesignOutput(BaseModel):
+    image_url: str
+    image_description: str
 
 @CrewBase
 class BlogGenerator():
@@ -58,28 +63,29 @@ class BlogGenerator():
             tools=[dalle_tool]
         )
 
-    @task
-    def plan_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['plan_task']
-        )
+    # @task
+    # def plan_task(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config['plan_task']
+    #     )
 
-    @task
-    def write_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['write_task']
-        )
+    # @task
+    # def write_task(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config['write_task']
+    #     )
 
-    @task
-    def edit_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['edit_task']
-        )
+    # @task
+    # def edit_task(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config['edit_task']
+    #     )
 
     @task
     def design_task(self) -> Task:
         return Task(
-            config=self.tasks_config['design_task']
+            config=self.tasks_config['design_task'],
+            output_pydantic=DesignOutput
         )
 
     @crew
