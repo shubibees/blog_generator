@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { notFound } from 'next/navigation';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from 'remark-gfm';
 import BackButton from '@/components/BackButton'; // You'll need to create this client component
 
 interface Blog {
@@ -50,10 +52,7 @@ const BlogDetailPage = async ({ params }: { params: { id: string } }) => {
         
         <div className="p-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">{blog.title}</h1>
-          <div 
-            className="prose max-w-none" 
-            dangerouslySetInnerHTML={{ __html: blog.content }}
-          />
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{blog.content}</ReactMarkdown>
         </div>
       </div>
     </div>

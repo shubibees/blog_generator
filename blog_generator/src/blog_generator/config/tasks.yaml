@@ -28,6 +28,26 @@ edit_task:
   depends_on:
     - write_task
 
+format_task:
+  description: |
+    Format the executive report into a beautiful markdown document following these guidelines:
+    1. Use proper markdown headers (#, ##, ###)
+    2. Format key findings and insights as bullet points
+    3. Add proper spacing and sections breaks
+    4. Make recommendations stand out using blockquotes
+    5. Ensure the date is properly formatted
+    6. Add a table of contents at the beginning
+    7. Use horizontal rules (---) to separate major sections
+    8. Add inline citations for each major claim using (Author, Year) format
+    9. Include a Sources section at the end
+    10. Each source should include title, publisher/author, and URL
+    11. Link inline citations to the corresponding entry in the Sources section
+    12. make sure it should not contain markdown code blocks (no ``` markers)
+  expected_output: A beautifully formatted markdown document that follows all the specified guidelines, enhancing readability and presentation.
+  agent: formatter
+  depends_on:
+    - edit_task
+
 design_task:
   description: >
     Create a banner image for the blog post that captures the essence of the content and attracts
@@ -36,4 +56,3 @@ design_task:
   agent: designer
   depends_on:
     - write_task
-

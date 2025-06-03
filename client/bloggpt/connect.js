@@ -14,7 +14,7 @@ const db = new sqlite3.Database(
 
 // Serialize method ensures that database queries are executed sequentiall
 db.serialize(() => {
-          db.run("DELETE FROM blogs where id in (2,3)")
+          db.run("DELETE FROM blogs where id in (5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24)")
           db.close((err) => {
               if (err) {
                   return console.error(err.message);

@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ImageIcon } from "lucide-react";
 import { marked } from "marked";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from 'remark-gfm';
 import Image from "next/image";
 import DOMPurify from "dompurify";
 import BlogListing from "@/components/BlogListing";
@@ -78,9 +79,18 @@ const BlogGeneratorPage: React.FC = () => {
         return null;
       }
 
-      const response = await fetch(extractedImageUrl);
+      // Use the proxy-image API endpoint to avoid CORS issues
+      const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(extractedImageUrl)}`;
+      const response = await fetch(proxyUrl);
       console.log("response image", response)
+      
       if (!response.ok) {
+        const errorData = await response.json();
+        // Check if this is an Azure Blob Storage URL that requires direct access
+        if (errorData.needsDirectAccess) {
+          console.warn('Azure Blob Storage URL requires server-side access');
+          throw new Error('This image requires server-side access and cannot be fetched directly');
+        }
         throw new Error(`Failed to fetch image: ${response.statusText}`);
       }
       
@@ -200,7 +210,7 @@ const BlogGeneratorPage: React.FC = () => {
       }
 
       // Extract edited blog content
-      const editedTask = blogData.blog.tasks_output.find(task => task.name === "write_task");
+      const editedTask = blogData.blog.tasks_output.find(task => task.name === "format_task");
       if (!editedTask) {
         throw new Error('No edited blog content found');
       }
@@ -281,7 +291,8 @@ const BlogGeneratorPage: React.FC = () => {
               )}
               
               <div className="prose lg:prose-xl dark:prose-invert max-w-none">
-                <ReactMarkdown>{blog}</ReactMarkdown>
+                {/* <ReactMarkdown remarkPlugins={[remarkGfm]}>{blog}</ReactMarkdown> */}
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{blog}</ReactMarkdown>
               </div>
             </div>
           ) : (

@@ -54,6 +54,13 @@ class BlogGenerator():
             config=self.agents_config['editor'],
             verbose=True
         )
+        
+    @agent
+    def formatter(self) -> Agent:
+        return Agent(
+            config=self.agents_config['formatter'],
+            verbose=True
+        )
 
     @agent
     def designer(self) -> Agent:
@@ -63,23 +70,29 @@ class BlogGenerator():
             tools=[dalle_tool]
         )
 
-    # @task
-    # def plan_task(self) -> Task:
-    #     return Task(
-    #         config=self.tasks_config['plan_task']
-    #     )
+    @task
+    def plan_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['plan_task']
+        )
 
-    # @task
-    # def write_task(self) -> Task:
-    #     return Task(
-    #         config=self.tasks_config['write_task']
-    #     )
+    @task
+    def write_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['write_task']
+        )
 
-    # @task
-    # def edit_task(self) -> Task:
-    #     return Task(
-    #         config=self.tasks_config['edit_task']
-    #     )
+    @task
+    def edit_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['edit_task']
+        )
+        
+    @task
+    def format_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['format_task']
+        )
 
     @task
     def design_task(self) -> Task:
